@@ -6,6 +6,8 @@
   "description": "部署於 Vercel 的基礎 LINE 回聲機器人",
   "scripts": {
     "test": "node --test"
+  },
+  "dependencies": {
+    "openai": "^7.8.0"
   }
 }
-
