@@ -1,5 +1,10 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
-  "public": true
+  "public": true,
+  "functions": {
+    "api/webhook.mjs": {
+      "maxDuration": 30
+    }
+  }
 }

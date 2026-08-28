@@ -3,6 +3,7 @@ import {
   replyText,
   validateSignature,
 } from "../lib/line.mjs";
+import { generateNursingReply } from "../lib/openai.mjs";
 
 export default {
   async fetch(request) {
@@ -54,8 +55,8 @@ export default {
       return Response.json({ ok: true, handled: 0 });
     }
 
-    if (!channelAccessToken) {
-      console.error("缺少 LINE_CHANNEL_ACCESS_TOKEN 環境變數");
+    if (!channelAccessToken || !process.env.OPENAI_API_KEY) {
+      console.error("缺少 LINE_CHANNEL_ACCESS_TOKEN 或 OPENAI_API_KEY 環境變數");
       return Response.json(
         { ok: false, message: "伺服器尚未完成設定" },
         { status: 500 },
@@ -64,7 +65,13 @@ export default {
 
     try {
       await Promise.all(
-        replies.map((reply) => replyText(reply, channelAccessToken)),
+        replies.map(async (reply) => {
+          const answer = await generateNursingReply(reply.text);
+          await replyText(
+            { replyToken: reply.replyToken, text: answer },
+            channelAccessToken,
+          );
+        }),
       );
       return Response.json({ ok: true, handled: replies.length });
     } catch (error) {
@@ -76,4 +83,3 @@ export default {
     }
   },
 };
-
