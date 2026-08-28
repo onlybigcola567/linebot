@@ -1,0 +1,11 @@
+{
+  "name": "linebot",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "部署於 Vercel 的基礎 LINE 回聲機器人",
+  "scripts": {
+    "test": "node --test"
+  }
+}
+
